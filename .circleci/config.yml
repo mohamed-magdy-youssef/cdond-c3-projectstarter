@@ -309,12 +309,17 @@ jobs:
           command: |
             cd backend
             npm i
+            echo "Building ------"
             npm run build
             cd ..
+            echo "tar artifact ------"
             tar -C backend -czvf artifact.tar.gz .
+            echo "moving artifact.tar.gz to deploy/files ------"
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
+            echo "Contents  of the inventor.circleci/ansible/roles/deploy/filesy.txt file is ------"
             cat inventory.txt
+            echo "running ansible-playbook ------"
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
