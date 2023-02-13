@@ -13,6 +13,5 @@
   shell: |
     cd ~/app
     npm i
-    cd ~/app/dist
     pm2 stop default
     pm2 start main.js

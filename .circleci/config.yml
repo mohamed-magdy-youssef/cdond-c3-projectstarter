@@ -311,11 +311,8 @@ jobs:
             npm i
             echo "Building ------"
             npm run build
-            cd ..
             echo "tar artifact ------"
-            tar -C backend -czvf artifact.tar.gz .
-            echo "moving artifact.tar.gz to deploy/files ------"
-            mv artifact.tar.gz .circleci/ansible/roles/deploy/files
+            tar -czf .circleci/ansible/roles/deploy/files/artifact.tar.gz dist/* package.json package-lock.json
             cd .circleci/ansible
             echo "Contents  of the inventor.circleci/ansible/roles/deploy/filesy.txt file is ------"
             cat inventory.txt
