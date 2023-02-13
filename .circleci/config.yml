@@ -1,6 +1,16 @@
 version: 2.1
 
 commands:
+  install-awscli:
+    description: Install AWS CLI on ubuntu
+    steps:
+      - run:
+          name: Install AWS CLI # https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
   install-ansible:
     description: Install Ansible on ubuntu
     steps:
@@ -166,13 +176,10 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli:latest
+      - image: cimg/base:2023.02
     steps:
       - checkout
-      - run:
-          name: Install tar gzip
-          command: |
-            yum install -y tar gzip
+      - install-awscli
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -205,9 +212,10 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: amazon/aws-cli:latest
+      - image: cimg/base:2023.02
     steps:
       - checkout
+      - install-awscli
       - install-ansible
       - add_ssh_keys:
           fingerprints: ["17:0f:77:19:a9:2b:99:b9:c8:5c:36:11:00:a8:b0:3c"]
@@ -222,9 +230,10 @@ jobs:
 
   run-migrations:
     docker:
-      - image: amazon/aws-cli:latest
+      - image: cimg/base:2023.02
     steps:
       - checkout
+      - install-awscli
       - install-node
       - restore_cache:
           keys: [run-migrations]
@@ -249,9 +258,10 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli:latest
+      - image: cimg/base:2023.02
     steps:
       - checkout
+      - install-awscli
       - install-node
       - restore_cache:
           keys: [deploy-frontend]
@@ -283,6 +293,7 @@ jobs:
       - image: cimg/base:2023.02
     steps:
       - checkout
+      - install-awscli
       - install-node
       - install-ansible
       - add_ssh_keys:
