@@ -6,7 +6,7 @@
 
 - name: "Unarchive artifact.tar.gz"
   unarchive:
-    src: artifact.tar.gz
+    src: files/artifact.tar.gz
     dest: ~/app
 
 - name: "Start the app"
