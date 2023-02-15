@@ -313,11 +313,14 @@ jobs:
             npm run build
             echo "tar artifact ------"
             tar -czvf artifact.tar.gz dist/* package.json package-lock.json
-            mv artifact.tar.gz ../.circleci/ansible/roles/deploy/files
-            echo "ls files ------"
-            ls ../.circleci/ansible/roles/deploy/files
-            cd ../.circleci/ansible
-            echo "Contents  of the inventor.circleci/ansible/roles/deploy/filesy.txt file is ------"
+            cd ..
+            mv backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
+            echo "files ------"
+            for file in .circleci/ansible/roles/deploy/files/*; do
+              echo "${file##*/}"
+            done
+            cd .circleci/ansible
+            echo "Contents of the inventor.txt file is ------"
             cat inventory.txt
             echo "running ansible-playbook ------"
             ansible-playbook -i inventory.txt deploy-backend.yml
