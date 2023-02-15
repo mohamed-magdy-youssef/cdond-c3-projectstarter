@@ -6,7 +6,7 @@
 
 - name: "Unarchive artifact.tar.gz"
   unarchive:
-    src: files/artifact.tar.gz
+    src: artifact.tar.gz
     dest: ~/app
 
 - name: "Start the app"
@@ -14,4 +14,4 @@
     cd ~/app
     npm i
     pm2 stop default
-    pm2 start main.js
+    pm2 start dist/main.js
