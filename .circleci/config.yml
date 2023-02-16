@@ -322,6 +322,9 @@ jobs:
             echo "Contents of the inventor.txt file is ------"
             cat inventory.txt
             echo "running ansible-playbook ------"
+            export TYPEORM_MIGRATIONS_DIR=./migrations
+            export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+            export TYPEORM_MIGRATIONS=./migrations/*.ts
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
