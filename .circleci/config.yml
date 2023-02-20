@@ -378,7 +378,7 @@ jobs:
                       list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                       --no-paginate --output text)
             echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
-            curl https://kvdb.io/${KVDB_BUCKET}/old_workflow_id -d "${OLD_WORKFLOW_ID}"
+            curl https://kvdb.io/${KVDB_BUCKET}/old_workflow_id -d "old=${OLD_WORKFLOW_ID}"
       - run:
           name: Update cloudfront distribution
           command: |
@@ -400,6 +400,7 @@ jobs:
           name: Get and Remove old stacks and files
           command: |
             export OldWorkflowID=$(curl https://kvdb.io/${KVDB_BUCKET}/old_workflow_id)
+            export OldWorkflowID=$(echo -n $OldWorkflowID | tail -c 7)
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
             # Fetch the stack names          
@@ -409,8 +410,11 @@ jobs:
 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
+              echo "aws s3 rm"
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              echo "delete-stack backend"
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+              echo "delete-stack frontend"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
             fi
 
