@@ -59,7 +59,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            export SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7})
             if(( $SUCCESS==1 ));
             then
               cd ~/project/backend
@@ -335,6 +335,7 @@ jobs:
     steps:
       - checkout
       - install-awscli
+      - install-node
       - run:
           name: Backend smoke test.
           command: |
@@ -358,7 +359,7 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-              exit 0
+              exit 1
             else
               exit 1
             fi
@@ -371,6 +372,7 @@ jobs:
     steps:
       - checkout
       - install-awscli
+      - install-node
       - run:
           name: Save Old Workflow ID to kvdb.io
           command: |
