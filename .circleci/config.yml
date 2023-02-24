@@ -59,9 +59,9 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            export SUCCESS=$(curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            SUCCESS=$(curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7})
             echo ${SUCCESS}
-            if(( $SUCCESS==1 ));
+            if [ $SUCCESS = 1 ];
             then
               cd ~/project/backend
               npm install
@@ -251,8 +251,8 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-            # If you are using kvdb.io, generate the bucket ID "V6HgmyQXwdtijmstNZZtrU" in your local terminal first
-            curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+              # If you are using kvdb.io, generate the bucket ID "V6HgmyQXwdtijmstNZZtrU" in your local terminal first
+              curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - save_cache:
           paths: [backend/node_modules]
